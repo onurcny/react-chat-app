@@ -7,3 +7,12 @@
     @apply h-full
   }
 }
+
+#chatList::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome browsers */
+}
+
+#chatList {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;  /* mozilla */
+}
