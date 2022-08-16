@@ -8,11 +8,16 @@
   }
 }
 
-#chatList::-webkit-scrollbar {
-  display: none;  /* Safari and Chrome browsers */
+#customScrollBar::-webkit-scrollbar {
+  width: 10px;
 }
 
-#chatList {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none;  /* mozilla */
-} 
+#customScrollBar::-webkit-scrollbar-track {
+  background: #444;
+}
+
+#customScrollBar::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 10px;
+  border: 1px solid #666;
+}
