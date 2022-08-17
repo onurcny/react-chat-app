@@ -28,7 +28,7 @@ export default function LoginPage({
     <div className='w-full h-full flex justify-center items-center'>
       <div className='p-2 flex flex-col justify-center items-center gap-y-2 bg-gradient-to-t from-tertiary to-primary rounded-md border-tertiary border-2'>
         <h2 className='w-full text-center text-white font-semibold'>Hoşgeldin!</h2>
-        <Input onChangeText={setUsername} />
+        <Input value={username} onChangeText={setUsername} />
         <Button disabled={disabled} onClick={login} title='Giriş Yap' />
       </div>
     </div>

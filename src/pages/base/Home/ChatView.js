@@ -4,71 +4,45 @@ import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'rea
 import { AiFillWechat } from "react-icons/ai"
 import { BiSend } from "react-icons/bi"
 
-let _messages = []
-
-export default forwardRef(function ChatView({ }, ref) {
-    const [messages, setMessages] = useState([])
-    const [user, setUser] = useState(null)
-    const [message, setMessage] = useState("")
-
-    useImperativeHandle(ref, () => ({
-        setUser,
-        setMessages
-    }))
+export default function ChatView({ user, messages = [] }) {
+    const [message, setMessage] = useState("a")
 
     const send = () => {
-        console.log(user.id, message)
         Socket.emit("message", { to: user.id, message })
+        setMessage("a")
     }
 
-    useEffect(() => {
-        if (!user)
-            return
-        Socket.on("message", data => {
-            if (data.room !== user.id)
-                return
-                
-            _messages.push(data)
-            setMessages([..._messages])
-        })
-        return () => {
-            Socket.off("message")
-        }
-    }, [user])
-
     return (
-        <div className='flex flex-1 flex-col'>
-            <div className='flex-1 bg-secondary'>
-                {!user ? (
-                    <div className='w-full h-full flex items-center justify-center text-tertiary'>
-                        <AiFillWechat size={30} />
-                    </div>
-                ) : (
-                    <div className='w-full h-full flex flex-col'>
-                        <div className='w-full h-[40px] flex justify-between items-center relative bg-gradient-to-t from-primary to-secondary overflow-hidden'>
-                            <div className='w-20 h-full flex justify-center items-center text-white'>
-
-                            </div>
-                        </div>
-                        <div id='customScrollBar' className='flex-1 overflow-y-scroll mt-0.5'>
-                            {messages.map((m, i) => (
-                                <MessageItem key={"messageitem" + i} side={m.sendBy === user.id} message={m} />
-                            ))}
-                        </div>
-                        <div className='w-full h-16 p-2 bg-primary flex gap-x-2'>
-                            <Input onChangeText={setMessage} width={"100%"} height={"100%"} />
-                            <button
-                                onClick={send}
-                                className='w-12 h-12 bg-tertiary rounded-full border-2 border-secondary text-primary flex items-center justify-center hover:bg-secondary'>
-                                <BiSend size={30} />
-                            </button>
+        <div className='w-full h-[calc(100vh-80px)] bg-secondary'>
+            {!user ? (
+                <div className='w-full h-full flex items-center justify-center text-tertiary'>
+                    <AiFillWechat size={30} />
+                </div>
+            ) : (
+                <div className='relative w-full h-full'>
+                    <div className='w-full h-[40px] flex justify-between items-center relative bg-gradient-to-t from-primary to-secondary overflow-hidden'>
+                        <div className='px-3 h-full flex justify-center items-center text-white'>
+                            {user.username}
                         </div>
                     </div>
-                )}
-            </div>
+                    <div id='customScrollBar' className='w-full h-[calc(100vh-168px)] overflow-y-scroll'>
+                        {messages.map((m, i) => (
+                            <MessageItem key={"messageitem" + i} side={m.sendBy === user.id} message={m} />
+                        ))}
+                    </div>
+                    <div className='w-full h-12 bg-primary flex items-center px-2 gap-x-2'>
+                        <Input value={message} width={"100%"} height={"80%"} onChangeText={setMessage} />
+                        <button
+                            onClick={send}
+                            className='w-10 h-10 bg-secondary rounded-full border-2 border-tertiary hover:bg-tertiary text-primary flex items-center justify-center'>
+                            <BiSend size={30} />
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     )
-})
+}
 
 const MessageItem = ({
     side = true,
@@ -76,11 +50,13 @@ const MessageItem = ({
 }) => {
     return (
         <div className={
-            'w-full py-1 px-2 text-white text-opacity-50 bg-gradient-to-r mb-0.5 ' +
-            (side ? 'text-left ' : 'text-right ') +
+            'w-full py-1 px-2 text-white text-opacity-75 bg-gradient-to-r mb-1 flex ' +
+            (side ? 'justify-start ' : 'justify-end ') +
             (side ? 'from-primary to-secondary' : ' from-secondary to-primary')
         }>
-            {message.message}
+            <div className='max-w-[80%]'>
+                {message.message}
+            </div>
         </div>
     )
 }

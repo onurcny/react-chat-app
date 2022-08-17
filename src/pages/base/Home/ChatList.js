@@ -23,15 +23,29 @@ export default function ChatList({
         Socket.emit("onlines")
         Socket.on("onlines", data => {
             setUsers(Array.from(data).filter(x => x.id !== user.id))
+            if(Array.from(data).findIndex(x => x.id === users[index].id) == -1)
+                onSelect(null)
         })
         return () => {
             Socket.off("onlines")
         }
     }, [])
 
+
     return (
-        <div className={(isOpen ? "w-72" : "w-[90px]") + ' h-full flex flex-col transition-all'}>
-            <button onClick={() => setIsOpen(prev => !prev)} className='w-full h-[40px] flex justify-between items-center relative bg-gradient-to-t from-primary to-secondary overflow-hidden'>
+        <div className={(isOpen ? "w-72" : "w-[90px]") + ' max-h-full transition-all relative'}>
+            <div className='h-20 flex bg-gradient-to-t from-primary to-secondary box-border justify-between items-center'>
+                <div className='w-full h-full flex justify-between items-center relative bg-gradient-to-t from-primary to-secondary overflow-hidden'>
+                    <div className='w-20 h-full flex justify-center items-center text-white'>
+                        {/* <img className='h-16 w-16 rounded-full border-gray-300 border-2 p-0.5' src="https://media-exp1.licdn.com/dms/image/C4E03AQEcGurc54owig/profile-displayphoto-shrink_200_200/0/1556197991582?e=2147483647&v=beta&t=eRFOyDUnUCNLNAoIG2tj-KRKn6MR08A1cw_-pgsKPdQ" /> */}
+                        <FaUserCircle size={50} color={"rgba(255, 255, 255, 0.7)"} />
+                    </div>
+                    <div className='absolute w-52 h-20 left-20 top-0 flex flex-col justify-center items-start'>
+                        <span className='text-white text-opacity-75 pl-3'>{user.username}</span>
+                    </div>
+                </div>
+            </div>
+            <button onClick={() => setIsOpen(prev => !prev)} className='relative w-full h-[40px] flex justify-between items-center bg-gradient-to-t from-primary to-secondary overflow-hidden'>
                 <div className='w-16 h-full flex justify-center items-center text-white'>
                     <BsPeople size={20} />
                 </div>
@@ -45,10 +59,12 @@ export default function ChatList({
                     }
                 </div>
             </button>
-            <div id='customScrollBar' className='flex-1 gap-y-[1px] overflow-y-scroll bg-gradient-to-r from-primary to-secondary overflow-x-hidden'>
-                {users.map((u, i) => (
-                    <ListItem key={"chatlistitem" + i} user={u} selected={index == i} onSelect={() => setIndex(i)} />
-                ))}
+            <div className='w-full overflow-hidden'>
+                <div id='customScrollBar' className='pt-[0px] w-full h-[calc(100vh-120px)] gap-y-[1px] overflow-y-scroll bg-gradient-to-r from-primary to-secondary overflow-x-hidden'>
+                    {users.map((u, i) => (
+                        <ListItem key={"chatlistitem" + i} user={u} selected={index == i} onSelect={() => setIndex(i)} />
+                    ))}
+                </div>
             </div>
         </div>
     )
@@ -59,6 +75,7 @@ const ListItem = ({
     onSelect,
     selected
 }) => {
+
     return (
         <button onClick={onSelect} className={
             'w-full h-20 flex justify-between items-center my-[1px] relative ' +
@@ -71,8 +88,10 @@ const ListItem = ({
             </div>
             <div className='absolute w-52 h-20 left-20 top-0 flex flex-col justify-center items-start ml-3'>
                 <span className='text-white text-opacity-75'>{user.username}</span>
-                <span className='text-white text-opacity-25'>Hiç mesaj yok.</span>
+                <span className='text-white text-opacity-25'>{user.message ?? "Hiç mesaj yok..."}</span>
             </div>
+            {user.count > 0 ? <div className='absolute top-2 right-2 w-5 h-5 rounded-full bg-white bg-opacity-50 text-sm flex items-center justify-center text-primary font-semibold border-2 border-primary'>{user.count}</div> : null}
+
         </button>
     )
 }

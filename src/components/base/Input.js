@@ -4,6 +4,7 @@ export default function Input({
     width = 150,
     height = 30,
     label = null,
+    value = "",
     onChangeText = () => null
 }) {
     return (
@@ -15,6 +16,7 @@ export default function Input({
                 width,
                 height
             }}
+                value={value}
                 onChange={e => onChangeText(e.target.value)} />
         </label>
     )

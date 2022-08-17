@@ -45,6 +45,14 @@ io.on("connection", socket => {
             sendBy: socket.id,
             message: data.message
         })
+        socket.emit("messageDetail", {
+            room: data.to,
+            message: data.message
+        })
+        io.to(data.to).emit("messageDetail", {
+            room: socket.id,
+            message: data.message
+        })
     })
 });
 
