@@ -18,7 +18,7 @@ export default function LoginPage() {
     return () => {
       Socket.off("login")
     }
-  }, [])
+  })
 
   const login = () => {
     setDisabled(true)

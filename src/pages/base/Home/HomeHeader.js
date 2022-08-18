@@ -1,8 +1,7 @@
 import { Socket } from 'Connection'
-import React, { useState } from 'react'
-import { FaUserCircle } from 'react-icons/fa'
+import React from 'react'
 
-export default function HomeHeader({ user }) {
+export default function HomeHeader() {
     
     const logout = () => {
         Socket.disconnect()
@@ -11,16 +10,6 @@ export default function HomeHeader({ user }) {
 
     return (
         <div className='w-full h-20 flex gap-x-0.5'>
-            {/* <div className='h-full flex bg-gradient-to-t from-primary to-secondary box-border justify-between items-center'>
-                <div className='w-full h-full flex justify-between items-center relative bg-gradient-to-t from-primary to-secondary overflow-hidden'>
-                    <div className='w-20 h-full flex justify-center items-center text-white'>
-                        <FaUserCircle size={50} color={"rgba(255, 255, 255, 0.7)"} />
-                    </div>
-                    <div className='w-52 h-20 left-20 top-0 flex flex-col justify-center items-start'>
-                        <span className='text-white text-opacity-75 pl-3'>{user.username}</span>
-                    </div>
-                </div>
-            </div> */}
             <div className='w-full px-3 h-20 bg-gradient-to-t from-primary to-secondary flex items-center justify-between'>
                 <div />
                 <div />

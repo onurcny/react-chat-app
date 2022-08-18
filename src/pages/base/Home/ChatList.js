@@ -23,11 +23,17 @@ export default function ChatList({
         Socket.emit("onlines")
         Socket.on("onlines", data => {
             dispatch(setOnlines(data))
+            let i = Array.from(data).findIndex(x => x.id === onlines[index].id)
+            if(i > -1) {
+                setIndex(i)
+            }else {
+                setIndex(null)
+            }
         })
         return () => {
             Socket.off("onlines")
         }
-    }, [])
+    })
 
 
     return (
@@ -59,7 +65,7 @@ export default function ChatList({
             <div className='w-full overflow-hidden'>
                 <div id='customScrollBar' className='pt-[0px] w-full h-[calc(100vh-120px)] gap-y-[1px] overflow-y-scroll bg-gradient-to-r from-primary to-secondary overflow-x-hidden'>
                     {onlines.map((u, i) => u.id !== user.id && (
-                        <ListItem key={"chatlistitem" + i} user={u} selected={index == i} onSelect={() => setIndex(i)} />
+                        <ListItem key={"chatlistitem" + i} user={u} selected={index === i} onSelect={() => setIndex(i)} />
                     ))}
                 </div>
             </div>

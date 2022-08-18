@@ -1,14 +1,10 @@
 import { Socket } from 'Connection'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ChatList from './ChatList'
 import ChatView from './ChatView'
 import HomeHeader from './HomeHeader'
 
-let me
-
-export default function HomePage({
-  user
-}) {
+export default function HomePage() {
   const [u, setU] = useState(null)
   const [allMessages, setAllMessages] = useState([])
   const [messages, setMessages] = useState([])
@@ -34,9 +30,9 @@ export default function HomePage({
 
   return (
     <div className='w-full h-full flex gap-x-0.5'>
-      <ChatList user={user} onSelect={onSelect} />
+      <ChatList onSelect={onSelect} />
       <div className='bg-primary flex-1 flex-col gap-x-[0.1rem]'>
-        <HomeHeader user={user} />
+        <HomeHeader />
         <ChatView user={u} messages={messages} />
       </div>
     </div>
