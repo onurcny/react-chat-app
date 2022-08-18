@@ -2,14 +2,17 @@ import { ASD, Socket } from "Connection";
 import HomePage from "pages/base/Home";
 import LoginPage from "pages/base/Login";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "store/UserSlice";
 
 
 function App() {
-  const [user, setUser] = useState(null)
+  const user = useSelector(state => state.user.value)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    Socket.on("logout", () => setUser(null))
-    Socket.on("disconnect", () => setUser(null))
+    Socket.on("logout", () => dispatch(setUser(null)))
+    Socket.on("disconnect", () => dispatch(setUser(null)))
     return () => {
       Socket.off("logout")
       Socket.off("disconnect")
@@ -19,9 +22,9 @@ function App() {
   return (
     <div className="h-full w-full flex items-center justify-center bg-primary">
       {user ? (
-        <HomePage user={user} />
+        <HomePage />
         ) : (
-        <LoginPage onLogin={setUser} />
+        <LoginPage onLogin={null} />
       )}
     </div>
   );

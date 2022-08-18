@@ -23,12 +23,14 @@ io.on("connection", socket => {
 
     socket.on("logout", () => {
         USERS.delete(socket.id)
+        console.log(USERS);
         socket.emit("logout")
         io.emit("onlines", Array.from(USERS.values()))
     })
 
     socket.on("disconnect", () => {
         USERS.delete(socket.id)
+        console.log(USERS);
         io.emit("onlines", Array.from(USERS.values()))
     })
 

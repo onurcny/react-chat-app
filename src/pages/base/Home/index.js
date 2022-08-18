@@ -28,9 +28,13 @@ export default function HomePage({
     setMessages(Array.from(allMessages.filter(x => x.room === u.id)))
   }, [allMessages, u])
 
+  const onSelect = u => {
+    setU(u)
+  }
+
   return (
     <div className='w-full h-full flex gap-x-0.5'>
-      <ChatList user={user} onSelect={setU} />
+      <ChatList user={user} onSelect={onSelect} />
       <div className='bg-primary flex-1 flex-col gap-x-[0.1rem]'>
         <HomeHeader user={user} />
         <ChatView user={u} messages={messages} />

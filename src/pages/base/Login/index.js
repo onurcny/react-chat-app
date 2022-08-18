@@ -2,16 +2,17 @@ import Button from 'components/base/Button'
 import Input from 'components/base/Input'
 import { Socket } from 'Connection'
 import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setUser } from 'store/UserSlice'
 
-export default function LoginPage({
-  onLogin = () => null
-}) {
+export default function LoginPage() {
   const [username, setUsername] = useState("")
   const [disabled, setDisabled] = useState(false)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     Socket.on("login", data => {
-      onLogin(data)
+      dispatch(setUser(data))
       setDisabled(false)
     })
     return () => {

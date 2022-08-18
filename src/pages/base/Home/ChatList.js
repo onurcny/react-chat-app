@@ -3,28 +3,26 @@ import { IoMdArrowDropright, IoMdArrowDropleft } from "react-icons/io"
 import { BsPeople } from "react-icons/bs"
 import { Socket } from 'Connection'
 import { FaUserCircle } from 'react-icons/fa'
+import { useDispatch, useSelector } from 'react-redux'
+import { setOnlines } from 'store/OnlinesSlice'
 
 export default function ChatList({
-    onSelect = () => null,
-    user = {
-        username: null,
-        id: null
-    }
+    onSelect = () => null
 }) {
-    const [users, setUsers] = useState([])
+    const onlines = useSelector((state) => state.onlines.value)
+    const user = useSelector((state) => state.user.value)
+    const dispatch = useDispatch()
     const [isOpen, setIsOpen] = useState(true)
     const [index, setIndex] = useState(null)
 
     useEffect(() => {
-        onSelect(users[index])
+        onSelect(onlines[index])
     }, [index])
 
     useEffect(() => {
         Socket.emit("onlines")
         Socket.on("onlines", data => {
-            setUsers(Array.from(data).filter(x => x.id !== user.id))
-            if(Array.from(data).findIndex(x => x.id === users[index].id) == -1)
-                onSelect(null)
+            dispatch(setOnlines(data))
         })
         return () => {
             Socket.off("onlines")
@@ -37,7 +35,6 @@ export default function ChatList({
             <div className='h-20 flex bg-gradient-to-t from-primary to-secondary box-border justify-between items-center'>
                 <div className='w-full h-full flex justify-between items-center relative bg-gradient-to-t from-primary to-secondary overflow-hidden'>
                     <div className='w-20 h-full flex justify-center items-center text-white'>
-                        {/* <img className='h-16 w-16 rounded-full border-gray-300 border-2 p-0.5' src="https://media-exp1.licdn.com/dms/image/C4E03AQEcGurc54owig/profile-displayphoto-shrink_200_200/0/1556197991582?e=2147483647&v=beta&t=eRFOyDUnUCNLNAoIG2tj-KRKn6MR08A1cw_-pgsKPdQ" /> */}
                         <FaUserCircle size={50} color={"rgba(255, 255, 255, 0.7)"} />
                     </div>
                     <div className='absolute w-52 h-20 left-20 top-0 flex flex-col justify-center items-start'>
@@ -61,7 +58,7 @@ export default function ChatList({
             </button>
             <div className='w-full overflow-hidden'>
                 <div id='customScrollBar' className='pt-[0px] w-full h-[calc(100vh-120px)] gap-y-[1px] overflow-y-scroll bg-gradient-to-r from-primary to-secondary overflow-x-hidden'>
-                    {users.map((u, i) => (
+                    {onlines.map((u, i) => u.id !== user.id && (
                         <ListItem key={"chatlistitem" + i} user={u} selected={index == i} onSelect={() => setIndex(i)} />
                     ))}
                 </div>

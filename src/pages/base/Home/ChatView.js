@@ -1,15 +1,15 @@
 import Input from 'components/base/Input'
 import { Socket } from 'Connection'
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
+import React, { useState } from 'react'
 import { AiFillWechat } from "react-icons/ai"
 import { BiSend } from "react-icons/bi"
 
 export default function ChatView({ user, messages = [] }) {
-    const [message, setMessage] = useState("a")
+    const [message, setMessage] = useState("")
 
     const send = () => {
         Socket.emit("message", { to: user.id, message })
-        setMessage("a")
+        setMessage("")
     }
 
     return (
