@@ -23,7 +23,7 @@ export default function ChatList({
         Socket.emit("onlines")
         Socket.on("onlines", data => {
             dispatch(setOnlines(data))
-            let i = Array.from(data).findIndex(x => x.id === onlines[index].id)
+            let i = Array.from(data).findIndex(x => x.id === onlines[index]?.id)
             if(i > -1) {
                 setIndex(i)
             }else {
